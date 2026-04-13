@@ -31,7 +31,7 @@ const Sidebar = () => {
       <div className="md:hidden fixed top-20 left-4 z-30">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 bg-surface-card rounded-lg border border-surface-border hover:border-accent-blue/50 transition-colors"
+          className="p-2 bg-[#171717] rounded-lg border border-[#2a2a2a] hover:border-blue-500/50 transition-colors"
         >
           {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -40,7 +40,7 @@ const Sidebar = () => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-surface-dark border-r border-surface-border
+          fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-[#111111] border-r border-[#2a2a2a]
           transition-transform duration-300 z-20
           md:translate-x-0 md:static md:top-0 md:h-screen
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -49,12 +49,12 @@ const Sidebar = () => {
         <div className="flex flex-col h-full p-6 space-y-8 overflow-y-auto">
           {/* Profile */}
           <div className="space-y-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent-blue to-accent-purple flex items-center justify-center text-white font-bold">
+            <div className="w-12 h-12 rounded-full bg-linear-to-br from-blue-500 to-violet-500 flex items-center justify-center text-white font-bold">
               {user?.name?.charAt(0).toUpperCase()}
             </div>
             <div>
               <p className="font-semibold text-white">{user?.name}</p>
-              <p className="text-sm text-dark-400">{user?.email}</p>
+              <p className="text-sm text-zinc-400">{user?.email}</p>
             </div>
           </div>
 
@@ -69,8 +69,8 @@ const Sidebar = () => {
                 }}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${
                   isActive(path)
-                    ? 'bg-accent-blue/20 text-accent-blue shadow-glow-blue'
-                    : 'text-dark-400 hover:bg-surface-hover'
+                    ? 'bg-blue-500/20 text-blue-500 shadow-glow-blue'
+                    : 'text-zinc-400 hover:bg-[#1f1f1f]'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -80,10 +80,10 @@ const Sidebar = () => {
           </nav>
 
           {/* Bottom Actions */}
-          <div className="border-t border-surface-border pt-4 space-y-2">
+          <div className="border-t border-[#2a2a2a] pt-4 space-y-2">
             <button
               onClick={() => navigate('/profile')}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-dark-400 hover:bg-surface-hover transition-all"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:bg-[#1f1f1f] transition-all"
             >
               <Settings className="w-5 h-5" />
               <span className="font-medium">Settings</span>
@@ -94,7 +94,7 @@ const Sidebar = () => {
                 navigate('/')
                 setIsOpen(false)
               }}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-dark-400 hover:bg-accent-red/10 hover:text-accent-red transition-all"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:bg-red-500/10 hover:text-red-500 transition-all"
             >
               <LogOut className="w-5 h-5" />
               <span className="font-medium">Logout</span>

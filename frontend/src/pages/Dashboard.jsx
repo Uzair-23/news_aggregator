@@ -11,7 +11,7 @@ const Dashboard = () => {
   const COLORS = ['#3b82f6', '#8b5cf6', '#ef4444']
 
   return (
-    <div className="flex min-h-screen bg-dark-950">
+    <div className="flex min-h-screen bg-[#0a0a0a]">
       <Navbar />
       <Sidebar />
 
@@ -20,7 +20,7 @@ const Dashboard = () => {
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold mb-2">Your Dashboard</h1>
-            <p className="text-dark-400">Track your reading analytics and insights</p>
+            <p className="text-zinc-400">Track your reading analytics and insights</p>
           </div>
 
           {/* Stats Cards */}
@@ -120,19 +120,19 @@ const Dashboard = () => {
           {/* Insights */}
           <div className="grid md:grid-cols-3 gap-6">
             <div className="card-base p-6 space-y-2">
-              <h4 className="font-semibold text-accent-blue">Most Read Category</h4>
+              <h4 className="font-semibold text-blue-500">Most Read Category</h4>
               <p className="text-2xl font-bold">Technology</p>
-              <p className="text-dark-400 text-sm">45% of your articles</p>
+              <p className="text-zinc-400 text-sm">45% of your articles</p>
             </div>
             <div className="card-base p-6 space-y-2">
-              <h4 className="font-semibold text-accent-purple">Average Sentiment</h4>
+              <h4 className="font-semibold text-violet-500">Average Sentiment</h4>
               <p className="text-2xl font-bold">Positive</p>
-              <p className="text-dark-400 text-sm">45% of content</p>
+              <p className="text-zinc-400 text-sm">45% of content</p>
             </div>
             <div className="card-base p-6 space-y-2">
-              <h4 className="font-semibold text-accent-cyan">Reading Consistency</h4>
+              <h4 className="font-semibold text-cyan-400">Reading Consistency</h4>
               <p className="text-2xl font-bold">Excellent</p>
-              <p className="text-dark-400 text-sm">15-day streak</p>
+              <p className="text-zinc-400 text-sm">15-day streak</p>
             </div>
           </div>
         </div>

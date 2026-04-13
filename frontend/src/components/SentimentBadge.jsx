@@ -1,8 +1,8 @@
 const SentimentBadge = ({ sentiment }) => {
   const sentiments = {
-    positive: { label: 'Positive', color: 'bg-accent-green/20 text-accent-green' },
-    neutral: { label: 'Neutral', color: 'bg-accent-blue/20 text-accent-blue' },
-    negative: { label: 'Negative', color: 'bg-accent-red/20 text-accent-red' }
+    positive: { label: 'Positive', color: 'bg-emerald-500/20 text-emerald-500' },
+    neutral: { label: 'Neutral', color: 'bg-blue-500/20 text-blue-500' },
+    negative: { label: 'Negative', color: 'bg-red-500/20 text-red-500' }
   }
 
   const config = sentiments[sentiment] || sentiments.neutral

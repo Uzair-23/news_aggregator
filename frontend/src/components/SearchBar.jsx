@@ -16,7 +16,7 @@ const SearchBar = ({ onSearch, onClear, placeholder = 'Search articles...' }) =>
 
   return (
     <div className="relative">
-      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500 pointer-events-none" />
+      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 pointer-events-none" />
       <input
         type="text"
         value={query}
@@ -27,9 +27,9 @@ const SearchBar = ({ onSearch, onClear, placeholder = 'Search articles...' }) =>
       {query && (
         <button
           onClick={handleClear}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-surface-hover rounded transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-[#1f1f1f] rounded transition-colors"
         >
-          <X className="w-4 h-4 text-dark-500" />
+          <X className="w-4 h-4 text-zinc-500" />
         </button>
       )}
     </div>

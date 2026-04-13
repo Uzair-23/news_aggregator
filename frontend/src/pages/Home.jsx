@@ -32,11 +32,11 @@ const Home = () => {
   }, [])
 
   return (
-    <div className="bg-dark-950">
+    <div className="bg-[#0a0a0a]">
       <HeroSection />
 
       {/* Features Section */}
-      <section className="py-20 bg-surface-dark">
+      <section className="py-20 bg-[#111111]">
         <div className="container-app">
           <h2 className="section-title text-center mb-12">
             Powerful Features
@@ -74,12 +74,12 @@ const Home = () => {
                 className="card-base p-6 space-y-4 text-center"
               >
                 <div className="flex justify-center">
-                  <div className="p-3 bg-accent-blue/20 rounded-lg">
-                    <Icon className="w-8 h-8 text-accent-blue" />
+                  <div className="p-3 bg-blue-500/20 rounded-lg">
+                    <Icon className="w-8 h-8 text-blue-500" />
                   </div>
                 </div>
                 <h3 className="text-xl font-bold">{title}</h3>
-                <p className="text-dark-400 text-sm">{desc}</p>
+                <p className="text-zinc-400 text-sm">{desc}</p>
               </div>
             ))}
           </div>
@@ -99,7 +99,7 @@ const Home = () => {
                 key={cat}
                 className="card-base p-8 text-center group hover:scale-105 transition-transform"
               >
-                <h3 className="text-2xl font-bold group-hover:text-accent-blue transition-colors">
+                <h3 className="text-2xl font-bold group-hover:text-blue-500 transition-colors">
                   {cat}
                 </h3>
               </button>
@@ -109,7 +109,7 @@ const Home = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-surface-dark">
+      <section className="py-20 bg-[#111111]">
         <div className="container-app">
           <h2 className="section-title text-center mb-12">
             What Users Say
@@ -122,10 +122,10 @@ const Home = () => {
               { name: 'Maria Johnson', role: 'Student', text: 'Perfect for research. The summaries save me so much time!' }
             ].map((testimonial, idx) => (
               <div key={idx} className="card-base p-6 space-y-4">
-                <p className="text-dark-300">"{testimonial.text}"</p>
+                <p className="text-zinc-300">"{testimonial.text}"</p>
                 <div>
-                  <p className="font-semibold text-accent-blue">{testimonial.name}</p>
-                  <p className="text-dark-500 text-sm">{testimonial.role}</p>
+                  <p className="font-semibold text-blue-500">{testimonial.name}</p>
+                  <p className="text-zinc-500 text-sm">{testimonial.role}</p>
                 </div>
               </div>
             ))}
@@ -136,7 +136,7 @@ const Home = () => {
       {/* CTA Footer */}
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent-purple rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-violet-500 rounded-full blur-3xl" />
         </div>
 
         <div className="container-app text-center relative z-10 space-y-8">

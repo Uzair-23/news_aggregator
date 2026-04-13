@@ -54,20 +54,20 @@ export const validateEmail = (email) => {
 
 export const getSentimentColor = (sentiment) => {
   const sentiments = {
-    positive: 'text-accent-green',
-    neutral: 'text-accent-blue',
-    negative: 'text-accent-red'
+    positive: 'text-emerald-500',
+    neutral: 'text-blue-500',
+    negative: 'text-red-500'
   }
-  return sentiments[sentiment] || 'text-accent-blue'
+  return sentiments[sentiment] || 'text-blue-500'
 }
 
 export const getSentimentBg = (sentiment) => {
   const sentiments = {
-    positive: 'bg-accent-green/20',
-    neutral: 'bg-accent-blue/20',
-    negative: 'bg-accent-red/20'
+    positive: 'bg-emerald-500/20',
+    neutral: 'bg-blue-500/20',
+    negative: 'bg-red-500/20'
   }
-  return sentiments[sentiment] || 'bg-accent-blue/20'
+  return sentiments[sentiment] || 'bg-blue-500/20'
 }
 
 export const formatLargeNumber = (num) => {

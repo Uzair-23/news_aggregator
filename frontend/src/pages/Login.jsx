@@ -48,19 +48,19 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-dark-950 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent-blue rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500 rounded-full blur-3xl" />
       </div>
 
       <div className="w-full max-w-md z-10 space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-linear-to-r from-blue-500 via-violet-500 to-cyan-400 bg-clip-text text-transparent">
             NewsAI
           </h1>
-          <p className="text-dark-400">Welcome back to your personalized news</p>
+          <p className="text-zinc-400">Welcome back to your personalized news</p>
         </div>
 
         {/* Form Card */}
@@ -68,9 +68,9 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-dark-300">Email</label>
+              <label className="text-sm font-medium text-zinc-300">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500 pointer-events-none" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 pointer-events-none" />
                 <input
                   type="email"
                   value={email}
@@ -83,12 +83,12 @@ const Login = () => {
 
             {/* Password */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-dark-300">Password</label>
+              <label className="text-sm font-medium text-zinc-300">Password</label>
               <div className="relative">
                 {showPassword ? (
-                  <Eye className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500 pointer-events-none" />
+                  <Eye className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 pointer-events-none" />
                 ) : (
-                  <EyeOff className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500 pointer-events-none" />
+                  <EyeOff className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 pointer-events-none" />
                 )}
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -100,7 +100,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-dark-500 hover:text-dark-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -110,10 +110,10 @@ const Login = () => {
             {/* Remember & Forgot */}
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center gap-2">
-                <input type="checkbox" className="w-4 h-4 rounded border border-surface-border" />
-                <span className="text-dark-400">Remember me</span>
+                <input type="checkbox" className="w-4 h-4 rounded border border-[#2a2a2a]" />
+                <span className="text-zinc-400">Remember me</span>
               </label>
-              <a href="#" className="text-accent-blue hover:text-accent-blue/80">
+              <a href="#" className="text-blue-500 hover:text-blue-400">
                 Forgot password?
               </a>
             </div>
@@ -131,10 +131,10 @@ const Login = () => {
           {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-surface-border" />
+              <div className="w-full border-t border-[#2a2a2a]" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-surface-card text-dark-500">Or continue with</span>
+              <span className="px-2 bg-[#171717] text-zinc-500">Or continue with</span>
             </div>
           </div>
 
@@ -146,11 +146,11 @@ const Login = () => {
         </div>
 
         {/* Sign Up Link */}
-        <p className="text-center text-dark-400">
+        <p className="text-center text-zinc-400">
           Don't have an account?{' '}
           <button
             onClick={() => navigate('/register')}
-            className="text-accent-blue hover:text-accent-blue/80 font-semibold"
+            className="text-blue-500 hover:text-blue-400 font-semibold"
           >
             Sign up
           </button>

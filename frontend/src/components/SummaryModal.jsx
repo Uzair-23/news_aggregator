@@ -28,11 +28,11 @@ const SummaryModal = ({ article, isOpen, onClose }) => {
         onClick={(e) => e.stopPropagation()}
         className="glass-card max-w-2xl w-full max-h-96 overflow-y-auto opacity-0 scale-95"
       >
-        <div className="sticky top-0 bg-surface-card/95 p-4 border-b border-surface-border flex items-center justify-between">
+        <div className="sticky top-0 bg-[#171717]/95 p-4 border-b border-[#2a2a2a] flex items-center justify-between">
           <h2 className="text-xl font-bold">AI Summary</h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-surface-hover rounded-lg transition-colors"
+            className="p-1 hover:bg-[#1f1f1f] rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -41,43 +41,43 @@ const SummaryModal = ({ article, isOpen, onClose }) => {
         <div className="p-6 space-y-4">
           <div>
             <h3 className="font-semibold text-lg mb-2">{article?.title}</h3>
-            <p className="text-dark-400 text-sm">{article?.source} - {article?.date}</p>
+            <p className="text-zinc-400 text-sm">{article?.source} - {article?.date}</p>
           </div>
 
-          <div className="bg-surface-dark/50 p-4 rounded-xl border border-surface-border">
+          <div className="bg-[#111111]/50 p-4 rounded-xl border border-[#2a2a2a]">
             <h4 className="font-semibold mb-3 flex items-center gap-2">
               <span className="text-2xl">✨</span>
               AI-Generated Summary
             </h4>
-            <p className="text-dark-300 leading-relaxed">
+            <p className="text-zinc-300 leading-relaxed">
               {article?.summary || article?.description}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-accent-blue/10 p-3 rounded-lg border border-accent-blue/20">
-              <p className="text-xs text-dark-400 mb-1">Credibility Score</p>
-              <p className="text-lg font-bold text-accent-blue">{article?.credibility}%</p>
+            <div className="bg-blue-500/10 p-3 rounded-lg border border-blue-500/20">
+              <p className="text-xs text-zinc-400 mb-1">Credibility Score</p>
+              <p className="text-lg font-bold text-blue-500">{article?.credibility}%</p>
             </div>
-            <div className="bg-accent-purple/10 p-3 rounded-lg border border-accent-purple/20">
-              <p className="text-xs text-dark-400 mb-1">Sentiment</p>
-              <p className="text-lg font-bold text-accent-purple capitalize">{article?.sentiment}</p>
+            <div className="bg-violet-500/10 p-3 rounded-lg border border-violet-500/20">
+              <p className="text-xs text-zinc-400 mb-1">Sentiment</p>
+              <p className="text-lg font-bold text-violet-500 capitalize">{article?.sentiment}</p>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-surface-border">
+          <div className="pt-4 border-t border-[#2a2a2a]">
             <h4 className="font-semibold mb-2 text-sm">Key Points</h4>
-            <ul className="space-y-2 text-dark-400 text-sm">
+            <ul className="space-y-2 text-zinc-400 text-sm">
               <li className="flex gap-2">
-                <span className="text-accent-blue">•</span>
+                <span className="text-blue-500">•</span>
                 <span>Main storyline and context</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-accent-purple">•</span>
+                <span className="text-violet-500">•</span>
                 <span>Important facts and figures</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-accent-cyan">•</span>
+                <span className="text-cyan-400">•</span>
                 <span>Impact and implications</span>
               </li>
             </ul>

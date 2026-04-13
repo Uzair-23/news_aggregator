@@ -10,7 +10,7 @@ const Bookmarks = () => {
   ])
 
   return (
-    <div className="flex min-h-screen bg-dark-950">
+    <div className="flex min-h-screen bg-[#0a0a0a]">
       <Navbar />
       <Sidebar />
 
@@ -19,17 +19,17 @@ const Bookmarks = () => {
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold mb-2">Saved Articles</h1>
-            <p className="text-dark-400">Your personal collection of bookmarks</p>
+            <p className="text-zinc-400">Your personal collection of bookmarks</p>
           </div>
 
           {/* Empty State */}
           {bookmarkedArticles.length === 0 ? (
             <div className="text-center py-20">
-              <div className="w-20 h-20 bg-accent-blue/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Bookmark className="w-10 h-10 text-accent-blue" />
+              <div className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Bookmark className="w-10 h-10 text-blue-500" />
               </div>
               <h2 className="text-2xl font-bold mb-2">No bookmarks yet</h2>
-              <p className="text-dark-400 mb-8">
+              <p className="text-zinc-400 mb-8">
                 Start saving articles you want to read later
               </p>
               <button className="btn-primary">

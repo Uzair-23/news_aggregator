@@ -44,21 +44,21 @@ const HeroSection = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-dark-950 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
       <FloatingParticles count={30} />
       <Navbar />
 
       {/* Gradient Background */}
       <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-blue rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-purple rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-500 rounded-full blur-3xl" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 pt-32 pb-20 px-4">
         <div className="container-app max-w-3xl mx-auto text-center space-y-8">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-blue/20 border border-accent-blue/50 text-accent-blue text-sm font-medium">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 border border-blue-500/50 text-blue-500 text-sm font-medium">
             <Sparkles className="w-4 h-4" />
             Powered by AI
           </div>
@@ -75,7 +75,7 @@ const HeroSection = () => {
           {/* Subtitle */}
           <p
             ref={subtitleRef}
-            className="text-xl text-dark-400 leading-relaxed"
+            className="text-xl text-zinc-400 leading-relaxed"
           >
             Personalized AI-powered news from trusted sources. Get curated content that matches your interests and reading style.
           </p>
@@ -100,18 +100,18 @@ const HeroSection = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 pt-12 border-t border-surface-border/50">
+          <div className="grid grid-cols-3 gap-8 pt-12 border-t border-[#2a2a2a]/50">
             <div>
-              <p className="text-3xl font-bold text-accent-blue">50K+</p>
-              <p className="text-dark-400 text-sm">Active Users</p>
+              <p className="text-3xl font-bold text-blue-500">50K+</p>
+              <p className="text-zinc-400 text-sm">Active Users</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-accent-purple">500+</p>
-              <p className="text-dark-400 text-sm">News Sources</p>
+              <p className="text-3xl font-bold text-violet-500">500+</p>
+              <p className="text-zinc-400 text-sm">News Sources</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-accent-cyan">1M+</p>
-              <p className="text-dark-400 text-sm">Articles Daily</p>
+              <p className="text-3xl font-bold text-cyan-400">1M+</p>
+              <p className="text-zinc-400 text-sm">Articles Daily</p>
             </div>
           </div>
         </div>

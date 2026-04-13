@@ -36,14 +36,14 @@ const Navbar = () => {
     <nav
       ref={navRef}
       className={`fixed top-0 w-full z-40 transition-all duration-300 ${
-        isScrolled ? 'bg-surface-dark/80 backdrop-blur-md border-b border-surface-border' : 'bg-transparent'
+        isScrolled ? 'bg-[#111111]/80 backdrop-blur-md border-b border-[#2a2a2a]' : 'bg-transparent'
       }`}
     >
       <div className="container-app h-16 flex items-center justify-between">
         {/* Logo */}
         <button
           onClick={() => navigate('/')}
-          className="text-2xl font-bold bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+          className="text-2xl font-bold bg-linear-to-r from-blue-500 via-violet-500 to-cyan-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
         >
           NewsAI
         </button>
@@ -54,19 +54,19 @@ const Navbar = () => {
             <>
               <button
                 onClick={() => navigate('/feed')}
-                className="text-dark-400 hover:text-white transition-colors"
+                className="text-zinc-400 hover:text-white transition-colors"
               >
                 Feed
               </button>
               <button
                 onClick={() => navigate('/dashboard')}
-                className="text-dark-400 hover:text-white transition-colors"
+                className="text-zinc-400 hover:text-white transition-colors"
               >
                 Dashboard
               </button>
               <button
                 onClick={() => navigate('/bookmarks')}
-                className="text-dark-400 hover:text-white transition-colors"
+                className="text-zinc-400 hover:text-white transition-colors"
               >
                 Bookmarks
               </button>
@@ -75,7 +75,7 @@ const Navbar = () => {
 
           {!isHomePage && (
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dark-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
               <input
                 type="text"
                 placeholder="Search..."
@@ -89,18 +89,18 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           {isAuthenticated ? (
             <>
-              <button className="p-2 hover:bg-surface-dark rounded-lg transition-colors hidden sm:flex">
+              <button className="p-2 hover:bg-[#111111] rounded-lg transition-colors hidden sm:flex">
                 <Bell className="w-5 h-5" />
               </button>
               <button
                 onClick={() => navigate('/profile')}
-                className="p-2 hover:bg-surface-dark rounded-lg transition-colors hidden sm:flex"
+                className="p-2 hover:bg-[#111111] rounded-lg transition-colors hidden sm:flex"
               >
                 <User className="w-5 h-5" />
               </button>
               <button
                 onClick={logout}
-                className="p-2 hover:bg-surface-dark rounded-lg transition-colors hidden sm:flex"
+                className="p-2 hover:bg-[#111111] rounded-lg transition-colors hidden sm:flex"
               >
                 <LogOut className="w-5 h-5" />
               </button>
@@ -135,7 +135,7 @@ const Navbar = () => {
         {isOpen && (
           <div
             data-nav-menu
-            className="absolute top-16 left-0 right-0 bg-surface-dark border-b border-surface-border md:hidden"
+            className="absolute top-16 left-0 right-0 bg-[#111111] border-b border-[#2a2a2a] md:hidden"
           >
             <div className="container-app py-4 space-y-3">
               {isAuthenticated ? (
@@ -145,7 +145,7 @@ const Navbar = () => {
                       navigate('/feed')
                       setIsOpen(false)
                     }}
-                    className="block w-full text-left py-2 text-dark-400 hover:text-white transition-colors"
+                    className="block w-full text-left py-2 text-zinc-400 hover:text-white transition-colors"
                   >
                     Feed
                   </button>
@@ -154,7 +154,7 @@ const Navbar = () => {
                       navigate('/dashboard')
                       setIsOpen(false)
                     }}
-                    className="block w-full text-left py-2 text-dark-400 hover:text-white transition-colors"
+                    className="block w-full text-left py-2 text-zinc-400 hover:text-white transition-colors"
                   >
                     Dashboard
                   </button>
@@ -163,17 +163,17 @@ const Navbar = () => {
                       navigate('/bookmarks')
                       setIsOpen(false)
                     }}
-                    className="block w-full text-left py-2 text-dark-400 hover:text-white transition-colors"
+                    className="block w-full text-left py-2 text-zinc-400 hover:text-white transition-colors"
                   >
                     Bookmarks
                   </button>
-                  <div className="border-t border-surface-border my-3 pt-3">
+                  <div className="border-t border-[#2a2a2a] my-3 pt-3">
                     <button
                       onClick={() => {
                         navigate('/profile')
                         setIsOpen(false)
                       }}
-                      className="block w-full text-left py-2 text-dark-400 hover:text-white transition-colors"
+                      className="block w-full text-left py-2 text-zinc-400 hover:text-white transition-colors"
                     >
                       Profile
                     </button>
@@ -182,7 +182,7 @@ const Navbar = () => {
                         logout()
                         setIsOpen(false)
                       }}
-                      className="block w-full text-left py-2 text-dark-400 hover:text-red-400 transition-colors"
+                      className="block w-full text-left py-2 text-zinc-400 hover:text-red-400 transition-colors"
                     >
                       Logout
                     </button>

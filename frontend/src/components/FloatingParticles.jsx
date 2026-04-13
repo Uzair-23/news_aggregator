@@ -30,7 +30,7 @@ const FloatingParticles = ({ count = 20 }) => {
         <div
           key={i}
           data-particle
-          className="absolute w-1 h-1 bg-accent-blue rounded-full opacity-30"
+          className="absolute w-1 h-1 bg-blue-500 rounded-full opacity-30"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`

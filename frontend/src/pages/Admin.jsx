@@ -20,7 +20,7 @@ const Admin = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-dark-950">
+    <div className="flex min-h-screen bg-[#0a0a0a]">
       <Navbar />
       <Sidebar />
 
@@ -29,7 +29,7 @@ const Admin = () => {
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
-            <p className="text-dark-400">Manage platform and content</p>
+            <p className="text-zinc-400">Manage platform and content</p>
           </div>
 
           {/* Stats */}
@@ -47,13 +47,13 @@ const Admin = () => {
               <h3 className="text-lg font-bold">Recent Reports</h3>
               <div className="space-y-3">
                 {reports.map(report => (
-                  <div key={report.id} className="flex items-center justify-between p-3 bg-surface-hover rounded-lg">
+                  <div key={report.id} className="flex items-center justify-between p-3 bg-[#1f1f1f] rounded-lg">
                     <div className="flex-1">
                       <p className="font-medium">{report.type}</p>
-                      <p className="text-dark-400 text-sm">{report.count} reported items</p>
+                      <p className="text-zinc-400 text-sm">{report.count} reported items</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className={`badge text-xs ${report.status === 'pending' ? 'bg-accent-red/20 text-accent-red' : 'bg-accent-green/20 text-accent-green'}`}>
+                      <span className={`badge text-xs ${report.status === 'pending' ? 'bg-red-500/20 text-red-500' : 'bg-emerald-500/20 text-emerald-500'}`}>
                         {report.status}
                       </span>
                       {report.status === 'pending' && (
@@ -104,7 +104,7 @@ const Admin = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-surface-border">
+                  <tr className="border-b border-[#2a2a2a]">
                     <th className="text-left py-3 px-3">Article</th>
                     <th className="text-left py-3 px-3">Reason</th>
                     <th className="text-left py-3 px-3">Source</th>
@@ -117,14 +117,14 @@ const Admin = () => {
                     { id: 2, title: 'Duplicate article found', reason: 'Content repost', source: 'Tech News' },
                     { id: 3, title: 'Low credibility source', reason: 'Unreliable source', source: 'Blog Site' }
                   ].map(item => (
-                    <tr key={item.id} className="border-b border-surface-border hover:bg-surface-hover transition-colors">
+                    <tr key={item.id} className="border-b border-[#2a2a2a] hover:bg-[#1f1f1f] transition-colors">
                       <td className="py-3 px-3">{item.title}</td>
-                      <td className="py-3 px-3 text-dark-400">{item.reason}</td>
-                      <td className="py-3 px-3 text-dark-400">{item.source}</td>
+                      <td className="py-3 px-3 text-zinc-400">{item.reason}</td>
+                      <td className="py-3 px-3 text-zinc-400">{item.source}</td>
                       <td className="py-3 px-3">
                         <button
                           onClick={() => handleRemoveArticle(item.id)}
-                          className="text-accent-red hover:text-accent-red/80 flex items-center gap-1"
+                          className="text-red-500 hover:text-red-400 flex items-center gap-1"
                         >
                           <Trash2 className="w-4 h-4" />
                           Remove

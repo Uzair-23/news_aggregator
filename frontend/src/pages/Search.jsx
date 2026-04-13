@@ -48,7 +48,7 @@ const SearchPage = () => {
   }, [])
 
   return (
-    <div className="flex min-h-screen bg-dark-950">
+    <div className="flex min-h-screen bg-[#0a0a0a]">
       <Navbar />
       <Sidebar />
 
@@ -57,7 +57,7 @@ const SearchPage = () => {
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold mb-2">Advanced Search</h1>
-            <p className="text-dark-400">Find exactly what you're looking for</p>
+            <p className="text-zinc-400">Find exactly what you're looking for</p>
           </div>
 
           {/* Search Bar */}
@@ -70,7 +70,7 @@ const SearchPage = () => {
             {/* Advanced Filters */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-dark-300">Source</label>
+                <label className="text-sm font-medium text-zinc-300">Source</label>
                 <select
                   value={filters.source}
                   onChange={(e) => handleFilterChange('source', e.target.value)}
@@ -85,7 +85,7 @@ const SearchPage = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-dark-300">Category</label>
+                <label className="text-sm font-medium text-zinc-300">Category</label>
                 <select
                   value={filters.category}
                   onChange={(e) => handleFilterChange('category', e.target.value)}
@@ -100,7 +100,7 @@ const SearchPage = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-dark-300">Sentiment</label>
+                <label className="text-sm font-medium text-zinc-300">Sentiment</label>
                 <select
                   value={filters.sentiment}
                   onChange={(e) => handleFilterChange('sentiment', e.target.value)}
@@ -114,7 +114,7 @@ const SearchPage = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-dark-300">Date</label>
+                <label className="text-sm font-medium text-zinc-300">Date</label>
                 <select
                   value={filters.dateRange}
                   onChange={(e) => handleFilterChange('dateRange', e.target.value)}
@@ -133,8 +133,8 @@ const SearchPage = () => {
           {searched ? (
             <>
               <div className="space-y-2">
-                <p className="text-dark-400">
-                  Found <span className="text-accent-blue font-bold">{results.length}</span> results for "{query}"
+                <p className="text-zinc-400">
+                  Found <span className="text-blue-500 font-bold">{results.length}</span> results for "{query}"
                 </p>
               </div>
 
@@ -151,17 +151,17 @@ const SearchPage = () => {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <Search className="w-16 h-16 text-dark-700 mx-auto mb-4 opacity-50" />
-                  <p className="text-dark-400 text-lg">No articles found</p>
-                  <p className="text-dark-500 text-sm">Try different keywords or filters</p>
+                  <Search className="w-16 h-16 text-zinc-700 mx-auto mb-4 opacity-50" />
+                  <p className="text-zinc-400 text-lg">No articles found</p>
+                  <p className="text-zinc-500 text-sm">Try different keywords or filters</p>
                 </div>
               )}
             </>
           ) : (
             <div className="text-center py-20">
-              <Search className="w-20 h-20 text-dark-700 mx-auto mb-4 opacity-30" />
-              <p className="text-dark-400 text-lg">Ready to search?</p>
-              <p className="text-dark-500 text-sm">Enter a query above to get started</p>
+              <Search className="w-20 h-20 text-zinc-700 mx-auto mb-4 opacity-30" />
+              <p className="text-zinc-400 text-lg">Ready to search?</p>
+              <p className="text-zinc-500 text-sm">Enter a query above to get started</p>
             </div>
           )}
         </div>

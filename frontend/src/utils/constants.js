@@ -10,9 +10,9 @@ export const CATEGORIES = [
 ]
 
 export const SENTIMENTS = {
-  positive: { label: 'Positive', color: 'accent-green', bg: 'bg-accent-green/20' },
-  neutral: { label: 'Neutral', color: 'accent-blue', bg: 'bg-accent-blue/20' },
-  negative: { label: 'Negative', color: 'accent-red', bg: 'bg-accent-red/20' }
+  positive: { label: 'Positive', color: 'emerald-500', bg: 'bg-emerald-500/20' },
+  neutral: { label: 'Neutral', color: 'blue-500', bg: 'bg-blue-500/20' },
+  negative: { label: 'Negative', color: 'red-500', bg: 'bg-red-500/20' }
 }
 
 export const NEWS_SOURCES = [

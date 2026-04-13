@@ -6,36 +6,6 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        dark: {
-          50: '#fafafa',
-          100: '#f5f5f5',
-          200: '#e5e5e5',
-          300: '#d4d4d4',
-          400: '#a1a1aa',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
-          950: '#0a0a0a',
-        },
-        surface: {
-          dark: '#111111',
-          card: '#171717',
-          hover: '#1f1f1f',
-          border: '#2a2a2a',
-        },
-        accent: {
-          blue: '#3b82f6',
-          purple: '#8b5cf6',
-          cyan: '#06b6d4',
-          green: '#10b981',
-          red: '#ef4444',
-          orange: '#f97316',
-          pink: '#ec4899',
-        },
-      },
       fontFamily: {
         sans: ['Inter', 'Geist', '-apple-system', 'BlinkMacSystemFont', 'segoe ui', 'Helvetica Neue', 'sans-serif'],
         mono: ['Fira Code', 'monospace'],
@@ -117,28 +87,45 @@ export default {
     },
   },
   plugins: [
-    function({ addUtilities }) {
+    function({ addUtilities, theme }) {
       const newUtilities = {
         '.glass': {
-          '@apply bg-surface-dark/40 backdrop-blur-md border border-surface-border': {},
+          backgroundColor: 'rgba(17, 17, 17, 0.4)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid #2a2a2a',
         },
         '.glass-card': {
-          '@apply bg-surface-card/80 backdrop-blur-md border border-surface-border rounded-2xl': {},
+          backgroundColor: 'rgba(23, 23, 23, 0.85)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          border: '1px solid #2a2a2a',
+          borderRadius: '1rem',
         },
         '.glow-border-blue': {
-          '@apply border border-accent-blue/30 shadow-glow-blue': {},
+          border: '1px solid rgba(59, 130, 246, 0.3)',
+          boxShadow: theme('boxShadow.glow-blue'),
         },
         '.glow-border-purple': {
-          '@apply border border-accent-purple/30 shadow-glow-purple': {},
+          border: '1px solid rgba(139, 92, 246, 0.3)',
+          boxShadow: theme('boxShadow.glow-purple'),
         },
         '.glow-border-cyan': {
-          '@apply border border-accent-cyan/30 shadow-glow-cyan': {},
+          border: '1px solid rgba(6, 182, 212, 0.3)',
+          boxShadow: theme('boxShadow.glow-cyan'),
         },
         '.text-gradient': {
-          '@apply bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent': {},
+          backgroundImage: 'linear-gradient(90deg, #3b82f6, #8b5cf6, #22d3ee)',
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          color: 'transparent',
         },
         '.btn-glow': {
-          '@apply transition-all duration-300 hover:shadow-glow-blue': {},
+          transitionProperty: 'box-shadow, transform',
+          transitionDuration: '300ms',
+        },
+        '.btn-glow:hover': {
+          boxShadow: theme('boxShadow.glow-blue'),
         },
       }
       addUtilities(newUtilities)

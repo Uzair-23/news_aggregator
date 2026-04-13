@@ -23,12 +23,12 @@ const NewsCard = ({ article, onBookmark, isBookmarked }) => {
           <span className="badge-primary text-xs">
             {article.category}
           </span>
-          <span className={`badge text-xs ${article.sentiment === 'positive' ? 'bg-accent-green/20 text-accent-green' : article.sentiment === 'neutral' ? 'bg-accent-blue/20 text-accent-blue' : 'bg-accent-red/20 text-accent-red'}`}>
+          <span className={`badge text-xs ${article.sentiment === 'positive' ? 'bg-emerald-500/20 text-emerald-500' : article.sentiment === 'neutral' ? 'bg-blue-500/20 text-blue-500' : 'bg-red-500/20 text-red-500'}`}>
             {article.sentiment}
           </span>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
-          <p className="text-xs text-dark-300 flex items-center gap-1">
+        <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 to-transparent p-3">
+          <p className="text-xs text-zinc-300 flex items-center gap-1">
             <TrendingUp className="w-3 h-3" />
             Credibility: {article.credibility}%
           </p>
@@ -37,22 +37,22 @@ const NewsCard = ({ article, onBookmark, isBookmarked }) => {
 
       {/* Content */}
       <div className="p-4 space-y-3">
-        <p className="text-xs text-accent-blue font-semibold">{article.source}</p>
-        <h3 className="text-lg font-bold line-clamp-2 group-hover:text-accent-blue transition-colors">
+        <p className="text-xs text-blue-500 font-semibold">{article.source}</p>
+        <h3 className="text-lg font-bold line-clamp-2 group-hover:text-blue-500 transition-colors">
           {article.title}
         </h3>
-        <p className="text-sm text-dark-400 line-clamp-2">
+        <p className="text-sm text-zinc-400 line-clamp-2">
           {truncateText(article.description, 80)}
         </p>
 
         {/* Meta */}
-        <div className="flex items-center justify-between pt-3 border-t border-surface-border">
-          <div className="flex items-center gap-1 text-xs text-dark-500">
+        <div className="flex items-center justify-between pt-3 border-t border-[#2a2a2a]">
+          <div className="flex items-center gap-1 text-xs text-zinc-500">
             <Clock className="w-3 h-3" />
             <span>{formatDate(article.date)}</span>
           </div>
           {article.readingTime && (
-            <span className="text-xs text-dark-500">{article.readingTime}</span>
+            <span className="text-xs text-zinc-500">{article.readingTime}</span>
           )}
         </div>
 
@@ -62,14 +62,14 @@ const NewsCard = ({ article, onBookmark, isBookmarked }) => {
             onClick={() => onBookmark?.(article.id)}
             className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-2 transition-all text-sm ${
               isBookmarked
-                ? 'bg-accent-blue/20 text-accent-blue'
-                : 'bg-surface-hover text-dark-400 hover:bg-accent-blue/10'
+                ? 'bg-blue-500/20 text-blue-500'
+                : 'bg-[#1f1f1f] text-zinc-400 hover:bg-blue-500/10'
             }`}
           >
             <BookmarkPlus className="w-4 h-4" />
             <span className="hidden sm:inline">Save</span>
           </button>
-          <button className="flex-1 py-2 rounded-lg flex items-center justify-center gap-2 transition-all text-sm bg-surface-hover text-dark-400 hover:bg-accent-purple/10">
+          <button className="flex-1 py-2 rounded-lg flex items-center justify-center gap-2 transition-all text-sm bg-[#1f1f1f] text-zinc-400 hover:bg-violet-500/10">
             <Share2 className="w-4 h-4" />
             <span className="hidden sm:inline">Share</span>
           </button>

@@ -63,7 +63,7 @@ const Feed = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-dark-950">
+    <div className="flex min-h-screen bg-[#0a0a0a]">
       <Navbar />
       <Sidebar />
 
@@ -72,7 +72,7 @@ const Feed = () => {
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold mb-2">Your Feed</h1>
-            <p className="text-dark-400">Personalized news just for you</p>
+            <p className="text-zinc-400">Personalized news just for you</p>
           </div>
 
           {/* Filters */}
@@ -84,7 +84,7 @@ const Feed = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Category Filter */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-dark-300">Category</label>
+                <label className="text-sm font-medium text-zinc-300">Category</label>
                 <div className="flex flex-wrap gap-2">
                   {CATEGORIES.slice(0, 4).map(cat => (
                     <button
@@ -92,8 +92,8 @@ const Feed = () => {
                       onClick={() => toggleCategory(cat)}
                       className={`badge text-xs transition-all ${
                         selectedCategories.includes(cat)
-                          ? 'bg-accent-blue/30 text-accent-blue'
-                          : 'bg-surface-dark text-dark-400 hover:bg-surface-hover'
+                          ? 'bg-blue-500/30 text-blue-500'
+                          : 'bg-[#111111] text-zinc-400 hover:bg-[#1f1f1f]'
                       }`}
                     >
                       {cat}
@@ -104,7 +104,7 @@ const Feed = () => {
 
               {/* Mood Filter */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-dark-300">Mood</label>
+                <label className="text-sm font-medium text-zinc-300">Mood</label>
                 <div className="relative">
                   <select
                     value={selectedMood}
@@ -117,13 +117,13 @@ const Feed = () => {
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500 pointer-events-none" />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 pointer-events-none" />
                 </div>
               </div>
 
               {/* Sort */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-dark-300">Sort By</label>
+                <label className="text-sm font-medium text-zinc-300">Sort By</label>
                 <div className="relative">
                   <select
                     value={sortBy}
@@ -136,7 +136,7 @@ const Feed = () => {
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500 pointer-events-none" />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 pointer-events-none" />
                 </div>
               </div>
             </div>
@@ -166,7 +166,7 @@ const Feed = () => {
           {/* No more articles */}
           {!hasMore && articles.length > 0 && (
             <div className="text-center py-12">
-              <p className="text-dark-400">No more articles to load</p>
+              <p className="text-zinc-400">No more articles to load</p>
             </div>
           )}
         </div>
