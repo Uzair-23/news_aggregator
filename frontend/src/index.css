@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-dark-950 text-dark-100 font-sans antialiased;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-dark-950;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-dark-700 rounded-full hover:bg-dark-600 transition-colors;
+  }
+}
+
+@layer components {
+  .container-app {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .card-base {
+    @apply glass-card transition-all duration-300 hover:border-accent-blue/50 hover:shadow-card;
+  }
+
+  .btn-base {
+    @apply px-4 py-2 rounded-2xl font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply btn-base bg-accent-blue text-white hover:bg-blue-600 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply btn-base border border-surface-border bg-surface-dark/50 text-white hover:bg-surface-hover;
+  }
+
+  .input-base {
+    @apply w-full px-4 py-2 rounded-xl bg-surface-dark border border-surface-border text-white placeholder-dark-400 transition-all duration-300 focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .badge-primary {
+    @apply badge bg-accent-blue/20 text-accent-blue;
+  }
+
+  .badge-secondary {
+    @apply badge bg-accent-purple/20 text-accent-purple;
+  }
+
+  .badge-success {
+    @apply badge bg-accent-green/20 text-accent-green;
+  }
+
+  .badge-danger {
+    @apply badge bg-accent-red/20 text-accent-red;
+  }
+
+  .section-title {
+    @apply text-4xl md:text-5xl font-bold tracking-tight;
+  }
+
+  .section-subtitle {
+    @apply text-lg text-dark-400 max-w-2xl mx-auto;
+  }
+}
+
+/* Smooth transitions */
+* {
+  @apply transition-colors duration-300;
+}
+
+/* Selection styling */
+::selection {
+  @apply bg-accent-blue/30 text-dark-100;
+}
+
+/* Disable default button styles */
+button {
+  @apply border-0 outline-none cursor-pointer;
+}
+
+/* Scrollbar animation */
+@keyframes scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(10px);
+  }
+}
+
+/* Gradient text animation */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.text-gradient-animated {
+  background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6);
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism effect */
+.glass-effect {
+  background: rgba(17, 17, 17, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Neon glow cursor effect (optional global) */
+body {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" fill="none" stroke="%233b82f6" stroke-width="2" opacity="0.6"/><circle cx="16" cy="16" r="4" fill="%233b82f6"/></svg>') 16 16, auto;
+}
+
+/* Smooth page transitions */
+.fade-enter-active,
+.fade-exit-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-exit-to {
+  opacity: 0;
+}
