@@ -27,6 +27,8 @@ const cookieParser = require("cookie-parser");
 // Import configurations and middleware
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const newsRoutes = require("./routes/newsRoutes");
+const bookmarkRoutes = require("./routes/bookmarkRoutes");
 const errorHandler = require("./middleware/errorMiddleware");
 
 // Initialize Express app
@@ -69,6 +71,12 @@ app.get("/api/health", (req, res) => {
 
 // Authentication routes
 app.use("/api/auth", authRoutes);
+
+// News routes (public)
+app.use("/api/news", newsRoutes);
+
+// Bookmark routes (protected)
+app.use("/api/bookmarks", bookmarkRoutes);
 
 // 404 handler
 app.use((req, res) => {
