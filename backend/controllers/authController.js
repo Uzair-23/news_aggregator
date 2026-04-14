@@ -62,21 +62,12 @@ const register = asyncHandler(async (req, res, next) => {
   // Generate token
   const token = generateToken(user._id);
 
-  // Return response without password
+  // Return response without password (toJSON() strips password automatically)
   return res.status(201).json({
     success: true,
     message: "User registered successfully",
     token,
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      avatar: user.avatar,
-      preferences: user.preferences,
-      bookmarks: user.bookmarks,
-      createdAt: user.createdAt,
-    },
+    user: user.toJSON(),
   });
 });
 
@@ -124,21 +115,12 @@ const login = asyncHandler(async (req, res, next) => {
   // Generate token
   const token = generateToken(user._id);
 
-  // Return response without password
+  // Return response without password (toJSON() strips password automatically)
   return res.status(200).json({
     success: true,
     message: "Logged in successfully",
     token,
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      avatar: user.avatar,
-      preferences: user.preferences,
-      bookmarks: user.bookmarks,
-      createdAt: user.createdAt,
-    },
+    user: user.toJSON(),
   });
 });
 
@@ -147,11 +129,11 @@ const login = asyncHandler(async (req, res, next) => {
  * GET /api/auth/me
  * Protected route - requires valid JWT token
  * @param {Object} req - Express request object (with user attached by authMiddleware)
+ * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
  * @returns {Object} JSON response with user profile
  */
-
-const getMe = asyncHandler(async (req, res,next) => {
+const getMe = asyncHandler(async (req, res, next) => {
   // req.user is attached by the protect middleware
   const user = req.user;
 
@@ -164,17 +146,7 @@ const getMe = asyncHandler(async (req, res,next) => {
 
   return res.status(200).json({
     success: true,
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      avatar: user.avatar,
-      preferences: user.preferences,
-      bookmarks: user.bookmarks,
-      verified: user.verified,
-      createdAt: user.createdAt,
-    },
+    user: user.toJSON(),
   });
 });
 
@@ -183,39 +155,37 @@ const getMe = asyncHandler(async (req, res,next) => {
  * PUT /api/auth/me
  * Protected route - requires valid JWT token
  * @param {Object} req - Express request object (with user attached by authMiddleware)
+ * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
  * @returns {Object} JSON response with updated user
  */
-
-const updateProfile = asyncHandler(async (req, res,next) => {
+const updateProfile = asyncHandler(async (req, res, next) => {
   const { name, avatar, preferences } = req.body;
   const userId = req.user._id;
 
-  // Build update object
-  const updateData = {};
-  if (name) updateData.name = name.trim();
-  if (avatar) updateData.avatar = avatar;
-  if (preferences) updateData.preferences = preferences;
+  // Fetch the user document
+  const user = await User.findById(userId);
 
-  // Update user
-  const user = await User.findByIdAndUpdate(userId, updateData, {
-    new: true,
-    runValidators: true,
-  });
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  // Manually assign updated fields
+  // This approach ensures Mongoose pre("save") hooks are triggered (e.g., for password hashing)
+  if (name) user.name = name.trim();
+  if (avatar !== undefined) user.avatar = avatar;
+  if (preferences) user.preferences = preferences;
+
+  // Save to database (triggers pre-save hooks)
+  await user.save();
 
   return res.status(200).json({
     success: true,
     message: "Profile updated successfully",
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      avatar: user.avatar,
-      preferences: user.preferences,
-      bookmarks: user.bookmarks,
-      createdAt: user.createdAt,
-    },
+    user: user.toJSON(),
   });
 });
 

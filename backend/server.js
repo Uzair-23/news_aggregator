@@ -4,6 +4,22 @@
  */
 
 require("dotenv").config();
+
+// ============================================
+// ENVIRONMENT VALIDATION
+// ============================================
+
+// Validate critical environment variables
+if (!process.env.JWT_SECRET) {
+  console.error(
+    "❌ FATAL ERROR: JWT_SECRET is not defined in environment variables"
+  );
+  console.error(
+    "Please add JWT_SECRET to your .env file before starting the server"
+  );
+  process.exit(1);
+}
+
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
