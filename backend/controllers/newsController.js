@@ -1,13 +1,55 @@
 /**
  * News Controller
  * Handles fetching news articles from NewsAPI external service
+ * Includes sentiment analysis on article titles and descriptions
  */
 
 const axios = require("axios");
+const Sentiment = require("sentiment");
 const asyncHandler = require("../utils/asyncHandler");
 
 const NEWS_API_KEY = process.env.NEWS_API_KEY;
 const NEWS_API_BASE_URL = "https://newsapi.org/v2";
+
+// Initialize sentiment analyzer
+const sentimentAnalyzer = new Sentiment();
+
+/**
+ * Helper function to analyze article sentiment
+ * Analyzes both title and description and returns sentiment label
+ * @param {string} title - Article title
+ * @param {string} description - Article description
+ * @returns {string} Sentiment label: "Positive", "Negative", or "Neutral"
+ */
+const analyzeSentiment = (title, description) => {
+  // Combine title and description (handle null description)
+  const textToAnalyze = `${title} ${description || ""}`.trim();
+
+  // Analyze sentiment
+  const result = sentimentAnalyzer.analyze(textToAnalyze);
+
+  // Determine sentiment label based on score
+  if (result.score > 1) {
+    return "Positive";
+  } else if (result.score < -1) {
+    return "Negative";
+  } else {
+    return "Neutral";
+  }
+};
+
+/**
+ * Helper function to add sentiment label to articles
+ * Maps over articles array and adds sentimentLabel property
+ * @param {Array} articles - Array of article objects from NewsAPI
+ * @returns {Array} Articles with added sentimentLabel property
+ */
+const addSentimentToArticles = (articles) => {
+  return articles.map((article) => ({
+    ...article,
+    sentimentLabel: analyzeSentiment(article.title, article.description),
+  }));
+};
 
 /**
  * Get latest top headlines
@@ -15,7 +57,7 @@ const NEWS_API_BASE_URL = "https://newsapi.org/v2";
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
- * @returns {Object} JSON response with top headlines
+ * @returns {Object} JSON response with top headlines including sentiment labels
  */
 const getLatestNews = asyncHandler(async (req, res, next) => {
   try {
@@ -26,10 +68,15 @@ const getLatestNews = asyncHandler(async (req, res, next) => {
       },
     });
 
+    // Add sentiment analysis to articles
+    const articlesWithSentiment = addSentimentToArticles(
+      response.data.articles
+    );
+
     return res.status(200).json({
       success: true,
-      count: response.data.articles.length,
-      articles: response.data.articles,
+      count: articlesWithSentiment.length,
+      articles: articlesWithSentiment,
     });
   } catch (error) {
     // Handle NewsAPI specific errors
@@ -74,7 +121,7 @@ const getLatestNews = asyncHandler(async (req, res, next) => {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
- * @returns {Object} JSON response with search results
+ * @returns {Object} JSON response with search results including sentiment labels
  */
 const searchNews = asyncHandler(async (req, res, next) => {
   const { q } = req.query;
@@ -97,10 +144,15 @@ const searchNews = asyncHandler(async (req, res, next) => {
       },
     });
 
+    // Add sentiment analysis to articles
+    const articlesWithSentiment = addSentimentToArticles(
+      response.data.articles
+    );
+
     return res.status(200).json({
       success: true,
-      count: response.data.articles.length,
-      articles: response.data.articles,
+      count: articlesWithSentiment.length,
+      articles: articlesWithSentiment,
     });
   } catch (error) {
     // Handle NewsAPI specific errors
@@ -145,7 +197,7 @@ const searchNews = asyncHandler(async (req, res, next) => {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
- * @returns {Object} JSON response with category news
+ * @returns {Object} JSON response with category news including sentiment labels
  */
 const getNewsByCategory = asyncHandler(async (req, res, next) => {
   const { category } = req.params;
@@ -177,11 +229,16 @@ const getNewsByCategory = asyncHandler(async (req, res, next) => {
       },
     });
 
+    // Add sentiment analysis to articles
+    const articlesWithSentiment = addSentimentToArticles(
+      response.data.articles
+    );
+
     return res.status(200).json({
       success: true,
       category: category.toLowerCase(),
-      count: response.data.articles.length,
-      articles: response.data.articles,
+      count: articlesWithSentiment.length,
+      articles: articlesWithSentiment,
     });
   } catch (error) {
     // Handle NewsAPI specific errors

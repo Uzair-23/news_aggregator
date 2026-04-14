@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { newsAPI } from '../services/api'
 import { MOCK_ARTICLES } from '../utils/mockData'
+import { transformArticles } from '../utils/articleTransformer'
 
 export const useFetchNews = (options = {}) => {
   const [articles, setArticles] = useState([])
@@ -24,10 +25,13 @@ export const useFetchNews = (options = {}) => {
           ...options
         })
 
+        // Transform articles from API format to frontend format
+        const transformedArticles = transformArticles(response.data.articles || [])
+
         if (resetPage) {
-          setArticles(response.data.articles || [])
+          setArticles(transformedArticles)
         } else {
-          setArticles(prev => [...prev, ...(response.data.articles || [])])
+          setArticles(prev => [...prev, ...transformedArticles])
         }
 
         setHasMore(response.data.hasMore !== false)
