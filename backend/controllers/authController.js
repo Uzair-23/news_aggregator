@@ -12,9 +12,10 @@ const asyncHandler = require("../utils/asyncHandler");
  * POST /api/auth/register
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
  * @returns {Object} JSON response with user and token
  */
-const register = asyncHandler(async (req, res) => {
+const register = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
 
   // Validation
@@ -84,9 +85,10 @@ const register = asyncHandler(async (req, res) => {
  * POST /api/auth/login
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
  * @returns {Object} JSON response with user and token
  */
-const login = asyncHandler(async (req, res) => {
+const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   // Validation
@@ -145,10 +147,11 @@ const login = asyncHandler(async (req, res) => {
  * GET /api/auth/me
  * Protected route - requires valid JWT token
  * @param {Object} req - Express request object (with user attached by authMiddleware)
- * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
  * @returns {Object} JSON response with user profile
  */
-const getMe = asyncHandler(async (req, res) => {
+
+const getMe = asyncHandler(async (req, res,next) => {
   // req.user is attached by the protect middleware
   const user = req.user;
 
@@ -180,10 +183,11 @@ const getMe = asyncHandler(async (req, res) => {
  * PUT /api/auth/me
  * Protected route - requires valid JWT token
  * @param {Object} req - Express request object (with user attached by authMiddleware)
- * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
  * @returns {Object} JSON response with updated user
  */
-const updateProfile = asyncHandler(async (req, res) => {
+
+const updateProfile = asyncHandler(async (req, res,next) => {
   const { name, avatar, preferences } = req.body;
   const userId = req.user._id;
 
