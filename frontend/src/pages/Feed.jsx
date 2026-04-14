@@ -21,6 +21,14 @@ const Feed = () => {
   })
 
   const feedRef = useRef(null)
+  const prevArticlesLength = useRef(0)
+
+  // Show loading when articles change (new filter applied)
+  useEffect(() => {
+    if (articles.length === 0 && !loading) {
+      console.log('📄 Articles loaded, count:', articles.length)
+    }
+  }, [articles, loading])
 
   // Infinite scroll
   useEffect(() => {

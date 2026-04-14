@@ -4,7 +4,10 @@
  * Includes sentiment analysis when available
  */
 
-export const transformArticle = (apiArticle) => {
+// Global counter for unique ID generation
+let articleIdCounter = 0
+
+export const transformArticle = (apiArticle, index = 0) => {
   // Extract source name if source is an object
   const sourceName = typeof apiArticle.source === 'object' 
     ? apiArticle.source.name 
@@ -14,8 +17,11 @@ export const transformArticle = (apiArticle) => {
   const sentimentLabel = apiArticle.sentimentLabel || 'neutral'
   const normalizedSentiment = sentimentLabel.toLowerCase()
 
-  // Generate a simple ID if not present
-  const id = apiArticle.id || `${sourceName}-${apiArticle.publishedAt}`
+  // Generate a unique ID - use url as primary key (most reliable)
+  // Fallback to combination of source + title + timestamp if url missing
+  const id = apiArticle.url 
+    ? btoa(apiArticle.url).substring(0, 16) // Base64 encode URL for unique ID
+    : `${sourceName}-${apiArticle.publishedAt}-${index}-${++articleIdCounter}`
 
   // Create reading time estimate (roughly 200 words per minute)
   const contentLength = (apiArticle.content || apiArticle.description || '').length
@@ -57,6 +63,9 @@ export const transformArticle = (apiArticle) => {
  * @returns {Array} Transformed articles ready for frontend
  */
 export const transformArticles = (articles) => {
-  if (!Array.isArray(articles)) return []
-  return articles.map(transformArticle)
+  if (!Array.isArray(articles)) {
+    console.warn('⚠️ transformArticles received non-array:', articles)
+    return []
+  }
+  return articles.map((article, index) => transformArticle(article, index))
 }
