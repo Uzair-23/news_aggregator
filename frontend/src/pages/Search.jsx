@@ -94,8 +94,8 @@ const SearchPage = () => {
       <Navbar />
       <Sidebar />
 
-      <main className="flex-1 pt-20 md:pt-0 md:ml-64 p-4 md:p-8">
-        <div className="max-w-6xl space-y-8">
+      <main className="flex-1 pt-20 md:pt-0 md:ml-64 p-4 md:p-8 w-full overflow-x-hidden">
+        <div className="w-full space-y-8">
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold mb-2">Advanced Search</h1>
@@ -183,7 +183,7 @@ const SearchPage = () => {
               </div>
 
               {results.length > 0 ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {results.map(article => (
                     <NewsCard
                       key={article.id}

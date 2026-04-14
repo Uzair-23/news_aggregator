@@ -14,8 +14,8 @@ const Bookmarks = () => {
       <Navbar />
       <Sidebar />
 
-      <main className="flex-1 pt-20 md:pt-0 md:ml-64 p-4 md:p-8">
-        <div className="max-w-6xl space-y-8">
+      <main className="flex-1 pt-20 md:pt-0 md:ml-64 p-4 md:p-8 w-full overflow-x-hidden">
+        <div className="w-full space-y-8">
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold mb-2">Saved Articles</h1>
@@ -37,7 +37,7 @@ const Bookmarks = () => {
               </button>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {bookmarkedArticles.map(article => (
                 <NewsCard
                   key={article.id}

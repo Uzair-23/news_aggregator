@@ -10,20 +10,20 @@ const NewsCard = ({ article, onBookmark, isBookmarked }) => {
   return (
     <div
       ref={cardRef}
-      className="card-base group overflow-hidden cursor-pointer"
+      className="card-base group overflow-hidden cursor-pointer h-full flex flex-col"
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative w-full aspect-video overflow-hidden flex-shrink-0">
         <img
           src={article.image}
           alt={article.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute top-3 right-3 flex gap-2">
-          <span className="badge-primary text-xs">
+        <div className="absolute top-2 right-2 sm:top-3 sm:right-3 flex gap-1 sm:gap-2 flex-wrap justify-end">
+          <span className="badge-primary text-xs px-2 py-1 truncate">
             {article.category}
           </span>
-          <span className={`badge text-xs ${article.sentiment === 'positive' ? 'bg-emerald-500/20 text-emerald-500' : article.sentiment === 'neutral' ? 'bg-blue-500/20 text-blue-500' : 'bg-red-500/20 text-red-500'}`}>
+          <span className={`badge text-xs px-2 py-1 ${article.sentiment === 'positive' ? 'bg-emerald-500/20 text-emerald-500' : article.sentiment === 'neutral' ? 'bg-blue-500/20 text-blue-500' : 'bg-red-500/20 text-red-500'}`}>
             {article.sentiment}
           </span>
         </div>
@@ -36,13 +36,13 @@ const NewsCard = ({ article, onBookmark, isBookmarked }) => {
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3">
-        <p className="text-xs text-blue-500 font-semibold">{article.source}</p>
+      <div className="p-4 space-y-3 flex-1 flex flex-col">
+        <p className="text-xs text-blue-500 font-semibold truncate">{article.source}</p>
         <h3 className="text-lg font-bold line-clamp-2 group-hover:text-blue-500 transition-colors">
           {article.title}
         </h3>
-        <p className="text-sm text-zinc-400 line-clamp-2">
-          {truncateText(article.description, 80)}
+        <p className="text-sm text-zinc-400 line-clamp-3 flex-1">
+          {article.description}
         </p>
 
         {/* Meta */}
@@ -57,7 +57,7 @@ const NewsCard = ({ article, onBookmark, isBookmarked }) => {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2 pt-2">
+        <div className="flex gap-2 pt-2 mt-auto">
           <button
             onClick={() => onBookmark?.(article.id)}
             className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-2 transition-all text-sm ${

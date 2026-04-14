@@ -75,8 +75,8 @@ const Feed = () => {
       <Navbar />
       <Sidebar />
 
-      <main className="flex-1 pt-20 md:pt-0 md:ml-64 p-4 md:p-8">
-        <div className="max-w-6xl space-y-6">
+      <main className="flex-1 pt-20 md:pt-0 md:ml-64 p-4 md:p-8 w-full overflow-x-hidden">
+        <div className="w-full space-y-6">
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold mb-2">Your Feed</h1>
@@ -153,7 +153,7 @@ const Feed = () => {
           {/* News Grid */}
           <div
             ref={feedRef}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {articles.map(article => (
               <NewsCard
