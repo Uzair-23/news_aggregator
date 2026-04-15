@@ -29,6 +29,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const newsRoutes = require("./routes/newsRoutes");
 const bookmarkRoutes = require("./routes/bookmarkRoutes");
+const aiRoutes = require("./routes/aiRoutes");
 const errorHandler = require("./middleware/errorMiddleware");
 
 // Initialize Express app
@@ -77,6 +78,9 @@ app.use("/api/news", newsRoutes);
 
 // Bookmark routes (protected)
 app.use("/api/bookmarks", bookmarkRoutes);
+
+// AI routes (protected)
+app.use("/api/ai", aiRoutes);
 
 // 404 handler
 app.use((req, res) => {
