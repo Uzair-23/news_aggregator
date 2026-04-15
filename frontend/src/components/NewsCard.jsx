@@ -59,7 +59,11 @@ const NewsCard = ({ article, onBookmark, isBookmarked }) => {
         {/* Actions */}
         <div className="flex gap-2 pt-2 mt-auto">
           <button
-            onClick={() => onBookmark?.(article.id)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onBookmark(article);
+            }}
             className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-2 transition-all text-sm ${
               isBookmarked
                 ? 'bg-blue-500/20 text-blue-500'

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import SearchBar from '../components/SearchBar'
@@ -6,14 +6,18 @@ import NewsCard from '../components/NewsCard'
 import Loader from '../components/Loader'
 import { CATEGORIES, MOOD_OPTIONS, SORT_OPTIONS } from '../utils/constants'
 import { useFetchNews } from '../hooks/useFetchNews'
-import { Filter, ChevronDown } from 'lucide-react'
+import { bookmarkAPI } from '../services/api'
+import { ChevronDown } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const Feed = () => {
   const [selectedCategories, setSelectedCategories] = useState(['Technology'])
   const [selectedMood, setSelectedMood] = useState('everything')
   const [sortBy, setSortBy] = useState('latest')
-  const [bookmarks, setBookmarks] = useState(new Set())
+
+  // Real Bookmark State connected to Backend
+  const [bookmarks, setBookmarks] = useState(new Set()) // Stores URLs for fast frontend UI toggle
+  const [savedBookmarks, setSavedBookmarks] = useState([]) // Stores actual DB objects with _id
 
   // Memoize fetch options to prevent infinite loop
   const fetchOptions = useMemo(() => ({
@@ -23,18 +27,26 @@ const Feed = () => {
   }), [selectedCategories, selectedMood, sortBy])
 
   const { articles, loading, hasMore, loadMore } = useFetchNews(fetchOptions)
-
   const feedRef = useRef(null)
-  const prevArticlesLength = useRef(0)
 
-  // Show loading when articles change (new filter applied)
+  // 1. Fetch user's real bookmarks from MongoDB on mount
   useEffect(() => {
-    if (articles.length === 0 && !loading) {
-      console.log('📄 Articles loaded, count:', articles.length)
-    }
-  }, [articles, loading])
+    const fetchBookmarks = async () => {
+      try {
+        const res = await bookmarkAPI.getAll();
+        if (res.data.success) {
+          setSavedBookmarks(res.data.bookmarks);
+          // Store URLs in a Set so the UI knows which ones to highlight
+          setBookmarks(new Set(res.data.bookmarks.map(b => b.url)));
+        }
+      } catch (err) {
+        console.error("Failed to load bookmarks:", err);
+      }
+    };
+    fetchBookmarks();
+  }, []);
 
-  // Infinite scroll
+  // Infinite scroll logic
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
@@ -51,19 +63,50 @@ const Feed = () => {
     return () => observer.disconnect()
   }, [hasMore, loading, loadMore])
 
-  const toggleBookmark = useCallback((id) => {
+  // 2. Real backend toggle logic
+  const toggleBookmark = async (article) => {
+    const isBookmarked = bookmarks.has(article.url);
+
+    // Optimistic UI Update (Update screen instantly)
     setBookmarks(prev => {
-      const newSet = new Set(prev)
-      if (newSet.has(id)) {
-        newSet.delete(id)
-        toast.success('Bookmark removed')
+      const newSet = new Set(prev);
+      if (isBookmarked) {
+        newSet.delete(article.url);
       } else {
-        newSet.add(id)
-        toast.success('Article bookmarked!')
+        newSet.add(article.url);
       }
-      return newSet
-    })
-  }, [])
+      return newSet;
+    });
+
+    try {
+      if (isBookmarked) {
+        // Find MongoDB _id and Delete
+        const bookmarkToDelete = savedBookmarks.find(b => b.url === article.url);
+        if (bookmarkToDelete) {
+          await bookmarkAPI.remove(bookmarkToDelete._id);
+          setSavedBookmarks(prev => prev.filter(b => b._id !== bookmarkToDelete._id));
+          toast.success('Bookmark removed');
+        }
+      } else {
+        // Add to MongoDB
+        const res = await bookmarkAPI.add(article);
+        setSavedBookmarks(prev => [...prev, res.data.bookmark]);
+        toast.success('Article bookmarked!');
+      }
+    } catch (err) {
+      // Revert UI on backend failure
+      setBookmarks(prev => {
+        const newSet = new Set(prev);
+        if (isBookmarked) {
+          newSet.add(article.url); // Re-add if delete failed
+        } else {
+          newSet.delete(article.url); // Remove if add failed
+        }
+        return newSet;
+      });
+      toast.error(err.response?.data?.message || 'Failed to update bookmark');
+    }
+  }
 
   const toggleCategory = (category) => {
     setSelectedCategories(prev => {
@@ -89,12 +132,9 @@ const Feed = () => {
 
           {/* Filters */}
           <div className="glass-card p-4 space-y-4">
-            {/* Search */}
             <SearchBar placeholder="Search articles..." />
-
-            {/* Filter Rows */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Category Filter */}
+              {/* Categories */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-zinc-300">Category</label>
                 <div className="flex flex-wrap gap-2">
@@ -114,7 +154,7 @@ const Feed = () => {
                 </div>
               </div>
 
-              {/* Mood Filter */}
+              {/* Mood */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-zinc-300">Mood</label>
                 <div className="relative">
@@ -155,27 +195,19 @@ const Feed = () => {
           </div>
 
           {/* News Grid */}
-          <div
-            ref={feedRef}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {articles.map(article => (
+          <div ref={feedRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {articles.map((article, index) => (
               <NewsCard
-                key={article.id}
+                key={`${article.url}-${index}`} // Bulletproof React Key to stop duplicate key crashes
                 article={article}
                 onBookmark={toggleBookmark}
-                isBookmarked={bookmarks.has(article.id)}
+                isBookmarked={bookmarks.has(article.url)} // Uses URL instead of ID
               />
             ))}
           </div>
 
-          {/* Loading Indicator */}
           {loading && <Loader />}
-
-          {/* Sentinel for infinite scroll */}
           <div data-sentinel className="h-4" />
-
-          {/* No more articles */}
           {!hasMore && articles.length > 0 && (
             <div className="text-center py-12">
               <p className="text-zinc-400">No more articles to load</p>

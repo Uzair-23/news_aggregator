@@ -2,7 +2,6 @@
  * Bookmark Model
  * Stores user bookmarked articles with full metadata for offline access
  */
-
 const mongoose = require("mongoose");
 
 const bookmarkSchema = new mongoose.Schema(
@@ -12,39 +11,33 @@ const bookmarkSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "User ID is required"],
     },
-
     title: {
       type: String,
       required: [true, "Article title is required"],
       trim: true,
     },
-
     description: {
       type: String,
       trim: true,
-      default: null,
+      default: "No description available",
     },
-
     url: {
       type: String,
       required: [true, "Article URL is required"],
       trim: true,
     },
-
     urlToImage: {
       type: String,
-      default: null,
+      default: "",
     },
-
     sourceName: {
       type: String,
       trim: true,
-      default: null,
+      default: "Unknown Source",
     },
-
     publishedAt: {
       type: Date,
-      default: null,
+      default: Date.now,
     },
   },
   { timestamps: true }
@@ -55,16 +48,5 @@ const bookmarkSchema = new mongoose.Schema(
  * user + url combination must be unique
  */
 bookmarkSchema.index({ user: 1, url: 1 }, { unique: true });
-
-/**
- * Pre-save middleware to trim all string fields
- */
-bookmarkSchema.pre("save", function (next) {
-  if (this.title) this.title = this.title.trim();
-  if (this.description) this.description = this.description.trim();
-  if (this.url) this.url = this.url.trim();
-  if (this.sourceName) this.sourceName = this.sourceName.trim();
-  next();
-});
 
 module.exports = mongoose.model("Bookmark", bookmarkSchema);

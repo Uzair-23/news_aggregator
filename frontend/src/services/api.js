@@ -51,8 +51,26 @@ export const newsAPI = {
 // Bookmark endpoints
 export const bookmarkAPI = {
   getAll: () => api.get('/bookmarks'),
-  add: (articleId) => api.post('/bookmarks', { articleId }),
-  remove: (articleId) => api.delete(`/bookmarks/${articleId}`)
+  add: (article) => {
+    // Safely extract source name whether it's a string, an object, or undefined
+    let sourceStr = "Unknown Source";
+    if (article.source) {
+      sourceStr = typeof article.source === 'string' ? article.source : (article.source.name || "Unknown Source");
+    }
+
+    // Force pure string types for every field to prevent any backend Mongoose CastErrors or .trim() TypeErrors
+    const payload = {
+      title: String(article.title || 'Untitled'),
+      description: String(article.description || 'No description available'),
+      url: String(article.url || `https://example.com/article/${Date.now()}`),
+      urlToImage: String(article.image || ''),
+      sourceName: String(sourceStr),
+      publishedAt: new Date().toISOString()
+    };
+
+    return api.post('/bookmarks', payload);
+  },
+  remove: (bookmarkId) => api.delete(`/bookmarks/${bookmarkId}`)
 }
 
 // Admin endpoints

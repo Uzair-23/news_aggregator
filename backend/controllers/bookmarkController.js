@@ -67,7 +67,8 @@ const addBookmark = asyncHandler(async (req, res, next) => {
     console.error("Bookmark creation error:", error);
     return res.status(500).json({
       success: false,
-      message: "Failed to create bookmark",
+      message: error.message || "Failed to create bookmark",
+      error: error.toString()
     });
   }
 });
