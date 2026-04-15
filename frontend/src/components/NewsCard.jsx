@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { BookmarkPlus, Share2, Clock, TrendingUp } from 'lucide-react'
 import { formatDate, truncateText } from '../utils/helpers'
 import { useScrollReveal } from '../hooks/useGSAPAnimations'
@@ -13,7 +14,7 @@ const NewsCard = ({ article, onBookmark, isBookmarked }) => {
       className="card-base group overflow-hidden cursor-pointer h-full flex flex-col"
     >
       {/* Image */}
-      <div className="relative w-full aspect-video overflow-hidden flex-shrink-0">
+      <Link to={`/article/${encodeURIComponent(article.id || article.url)}`} state={{ article }} className="relative w-full aspect-video overflow-hidden flex-shrink-0 block">
         <img
           src={article.image}
           alt={article.title}
@@ -33,14 +34,16 @@ const NewsCard = ({ article, onBookmark, isBookmarked }) => {
             Credibility: {article.credibility}%
           </p>
         </div>
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="p-4 space-y-3 flex-1 flex flex-col">
         <p className="text-xs text-blue-500 font-semibold truncate">{article.source}</p>
-        <h3 className="text-lg font-bold line-clamp-2 group-hover:text-blue-500 transition-colors">
-          {article.title}
-        </h3>
+        <Link to={`/article/${encodeURIComponent(article.id || article.url)}`} state={{ article }}>
+          <h3 className="text-lg font-bold line-clamp-2 group-hover:text-blue-500 transition-colors">
+            {article.title}
+          </h3>
+        </Link>
         <p className="text-sm text-zinc-400 line-clamp-3 flex-1">
           {article.description}
         </p>

@@ -73,6 +73,11 @@ export const bookmarkAPI = {
   remove: (bookmarkId) => api.delete(`/bookmarks/${bookmarkId}`)
 }
 
+// AI endpoints
+export const aiAPI = {
+  summarize: (title, content) => api.post('/ai/summarize', { title, content })
+}
+
 // Admin endpoints
 export const adminAPI = {
   getStats: () => api.get('/admin/stats'),

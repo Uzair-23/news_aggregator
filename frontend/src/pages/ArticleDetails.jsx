@@ -1,45 +1,53 @@
-import { useState, useRef, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useState } from 'react'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
-import { ArrowLeft, Share2, BookmarkPlus, MessageCircle, Clock, User } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import SummaryModal from '../components/SummaryModal'
-import { MOCK_ARTICLES } from '../utils/mockData'
-import gsap from 'gsap'
+import { ArrowLeft, Sparkles, ExternalLink } from 'lucide-react'
+import { aiAPI } from '../services/api'
 import toast from 'react-hot-toast'
+import { formatDate } from '../utils/helpers'
 
 const ArticleDetails = () => {
-  const { id } = useParams()
+  const { state } = useLocation()
   const navigate = useNavigate()
-  const [article, setArticle] = useState(null)
-  const [showSummary, setShowSummary] = useState(false)
-  const contentRef = useRef(null)
+  const article = state?.article
 
-  useEffect(() => {
-    // Mock fetch article
-    const found = MOCK_ARTICLES.find(a => a.id === parseInt(id)) || MOCK_ARTICLES[0]
-    setArticle(found)
+  const [isSummarizing, setIsSummarizing] = useState(false)
+  const [summary, setSummary] = useState(null)
 
-    // Animate content
-    gsap.from('[data-article-content]', {
-      opacity: 0,
-      y: 30,
-      duration: 0.6,
-      ease: 'power3.out'
-    })
-  }, [id])
+  if (!article) {
+    return (
+      <div className="bg-[#0a0a0a] min-h-screen">
+        <Navbar />
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center space-y-4">
+            <h1 className="text-2xl font-bold text-zinc-100">Article Not Found</h1>
+            <p className="text-zinc-400">This article could not be loaded.</p>
+            <Link
+              to="/feed"
+              className="inline-block mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Go back to Feed
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
-  if (!article) return null
-
-  const handleShare = async () => {
+  const handleSummarize = async () => {
     try {
-      await navigator.share({
-        title: article.title,
-        text: article.description,
-        url: window.location.href
-      })
+      setIsSummarizing(true)
+      const response = await aiAPI.summarize(
+        article.title,
+        article.description || article.content
+      )
+      setSummary(response.data.summary || response.data.message)
+      toast.success('Summary generated!')
     } catch (err) {
-      toast.success('Link copied to clipboard!')
+      toast.error(err.response?.data?.message || err.message || 'Failed to generate summary')
+      console.error('Summarize error:', err)
+    } finally {
+      setIsSummarizing(false)
     }
   }
 
@@ -47,163 +55,123 @@ const ArticleDetails = () => {
     <div className="bg-[#0a0a0a] min-h-screen">
       <Navbar />
 
-      {/* Hero Image */}
-      <div className="h-96 md:h-125 overflow-hidden relative">
-        <img
-          src={article.image}
-          alt={article.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent" />
+      <main className="pt-20 md:pt-8 pb-20">
+        <div className="max-w-4xl mx-auto px-4 md:px-8 space-y-8">
+          {/* Back Button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-zinc-400 hover:text-zinc-200 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Back
+          </button>
 
-        {/* Back Button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-24 left-4 md:left-8 p-2 bg-[#0a0a0a]/80 backdrop-blur-md rounded-lg hover:bg-[#0a0a0a] transition-colors"
-        >
-          <ArrowLeft className="w-6 h-6" />
-        </button>
-      </div>
-
-      {/* Content */}
-      <div data-article-content className="pt-0 md:pt-8 pb-20">
-        <div className="container-app max-w-3xl space-y-8">
-          {/* Meta */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-400 pt-6">
-            <span className="badge-primary">{article.category}</span>
-            <span>{article.source}</span>
-            <span className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              {article.readingTime}
-            </span>
-            <span>{new Date(article.date).toLocaleDateString()}</span>
+          {/* Article Header */}
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <span className="badge-primary">{article.category}</span>
+              <span className="badge text-xs px-2 py-1 bg-[#111111] text-zinc-400">
+                {article.source}
+              </span>
+              <span className="badge text-xs px-2 py-1 bg-[#111111] text-zinc-400">
+                {formatDate(article.date)}
+              </span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+              {article.title}
+            </h1>
           </div>
 
-          {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-            {article.title}
-          </h1>
+          {/* Featured Image */}
+          <div className="relative w-full rounded-xl overflow-hidden">
+            <img
+              src={article.image}
+              alt={article.title}
+              className="w-full h-96 object-cover"
+            />
+            {article.sentiment && (
+              <div className="absolute top-4 right-4">
+                <span className={`badge text-xs px-3 py-1 ${
+                  article.sentiment === 'positive' ? 'bg-emerald-500/20 text-emerald-500' :
+                  article.sentiment === 'neutral' ? 'bg-blue-500/20 text-blue-500' :
+                  'bg-red-500/20 text-red-500'
+                }`}>
+                  {article.sentiment.charAt(0).toUpperCase() + article.sentiment.slice(1)}
+                </span>
+              </div>
+            )}
+          </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 py-6 border-y border-[#2a2a2a]">
+          {/* Article Meta */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-6 border-y border-[#2a2a2a]">
             <div>
-              <p className="text-zinc-400 text-sm">Credibility</p>
-              <div className="w-full bg-[#111111] rounded-full h-2 mt-2">
+              <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2">Credibility</p>
+              <div className="w-full bg-[#111111] rounded-full h-2">
                 <div
-                  className="bg-emerald-500 h-full rounded-full"
-                  style={{ width: `${article.credibility}%` }}
+                  className="bg-blue-500 h-full rounded-full"
+                  style={{ width: `${article.credibility || 85}%` }}
                 />
               </div>
-              <p className="text-white font-semibold text-sm mt-1">{article.credibility}%</p>
+              <p className="text-white font-semibold text-sm mt-2">{article.credibility || 85}%</p>
             </div>
             <div>
-              <p className="text-zinc-400 text-sm">Sentiment</p>
-              <p className={`text-lg font-bold mt-2 capitalize ${
-                article.sentiment === 'positive' ? 'text-emerald-500' :
-                article.sentiment === 'neutral' ? 'text-blue-500' :
-                'text-red-500'
-              }`}>{article.sentiment}</p>
+              <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2">Reading Time</p>
+              <p className="text-white font-semibold text-sm">{article.readingTime}</p>
             </div>
             <div>
-              <p className="text-zinc-400 text-sm">Views</p>
-              <p className="text-lg font-bold mt-2">{article.views.toLocaleString()}</p>
+              <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2">Published</p>
+              <p className="text-white font-semibold text-sm">{formatDate(article.date)}</p>
             </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={() => setShowSummary(true)}
-              className="btn-primary flex items-center gap-2"
-            >
-              ✨ Read AI Summary
-            </button>
-            <button
-              onClick={() => toast.success('Article bookmarked!')}
-              className="btn-secondary flex items-center gap-2"
-            >
-              <BookmarkPlus className="w-5 h-5" />
-              Save
-            </button>
-            <button
-              onClick={handleShare}
-              className="btn-secondary flex items-center gap-2"
-            >
-              <Share2 className="w-5 h-5" />
-              Share
-            </button>
           </div>
 
           {/* Article Content */}
-          <div
-            ref={contentRef}
-            className="prose prose-invert max-w-none space-y-6 text-zinc-200 leading-relaxed"
-          >
+          <div className="space-y-6 text-zinc-200 leading-relaxed">
             <p className="text-lg text-zinc-300 italic">{article.description}</p>
-
-            <p>
-              {article.content || `This is a detailed article about ${article.title}. The content would be displayed here with full formatting, including multiple paragraphs discussing the topic in depth.`}
-            </p>
-
-            <div className="bg-[#111111] p-6 rounded-2xl border border-[#2a2a2a] space-y-3">
-              <h4 className="font-semibold text-white">About This Article</h4>
-              <ul className="space-y-2 text-zinc-300">
-                <li className="flex gap-2">
-                  <span className="text-blue-500">•</span>
-                  Source: {article.source}
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-violet-500">•</span>
-                  Credibility Score: {article.credibility}%
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-400">•</span>
-                  Category: {article.category}
-                </li>
-              </ul>
-            </div>
+            <p>{article.content || article.description}</p>
           </div>
 
-          {/* Comments Section */}
-          <div className="border-t border-[#2a2a2a] pt-8 space-y-6">
-            <h3 className="text-2xl font-bold flex items-center gap-2">
-              <MessageCircle className="w-6 h-6" />
-              Comments
-            </h3>
+          {/* Action Buttons */}
+          <div className="flex flex-wrap gap-3 py-6 border-y border-[#2a2a2a]">
+            <button
+              onClick={handleSummarize}
+              disabled={isSummarizing}
+              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
+            >
+              <Sparkles className="w-5 h-5" />
+              {isSummarizing ? 'Summarizing...' : '✨ Summarize with Gemini AI'}
+            </button>
+            <a
+              href={article.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 bg-[#1f1f1f] text-zinc-200 font-semibold rounded-lg flex items-center gap-2 hover:bg-[#2a2a2a] transition-colors"
+            >
+              <ExternalLink className="w-5 h-5" />
+              Read Full Article
+            </a>
+          </div>
 
-            {/* Comment Input */}
-            <div className="glass-card p-4 space-y-3">
-              <textarea
-                placeholder="Share your thoughts..."
-                rows="4"
-                className="input-base w-full"
-              />
-              <button className="btn-primary">Post Comment</button>
-            </div>
-
-            {/* Comments List */}
+          {/* Summary Section */}
+          {summary && (
             <div className="space-y-4">
-              {[1, 2].map(i => (
-                <div key={i} className="bg-[#111111] p-4 rounded-lg space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500">
-                      U
-                    </div>
-                    <div>
-                      <p className="font-semibold">User Name</p>
-                      <p className="text-zinc-400 text-xs">2 hours ago</p>
-                    </div>
-                  </div>
-                  <p className="text-zinc-300">Great article! Very insightful and well-written.</p>
-                </div>
-              ))}
+              <h2 className="text-2xl font-bold">AI Summary</h2>
+              <div className="glass-card p-6 space-y-3 rounded-xl border border-[#2a2a2a]">
+                <ul className="space-y-2 text-zinc-200">
+                  {summary.split('\n').map((point, index) => {
+                    if (!point.trim()) return null;
+                    return (
+                      <li key={index} className="flex gap-2">
+                        <span className="text-blue-500 flex-shrink-0">•</span>
+                        <span>{point.replace(/^[-*•]\s*/, '')}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      </div>
-
-      {/* Summary Modal */}
-      <SummaryModal article={article} isOpen={showSummary} onClose={() => setShowSummary(false)} />
+      </main>
     </div>
   )
 }
