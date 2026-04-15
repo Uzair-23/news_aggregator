@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import SearchBar from '../components/SearchBar'
@@ -14,11 +14,15 @@ const Feed = () => {
   const [selectedMood, setSelectedMood] = useState('everything')
   const [sortBy, setSortBy] = useState('latest')
   const [bookmarks, setBookmarks] = useState(new Set())
-  const { articles, loading, hasMore, loadMore } = useFetchNews({
+
+  // Memoize fetch options to prevent infinite loop
+  const fetchOptions = useMemo(() => ({
     categories: selectedCategories,
     mood: selectedMood,
     sort: sortBy
-  })
+  }), [selectedCategories, selectedMood, sortBy])
+
+  const { articles, loading, hasMore, loadMore } = useFetchNews(fetchOptions)
 
   const feedRef = useRef(null)
   const prevArticlesLength = useRef(0)

@@ -10,6 +10,7 @@ export const useFetchNews = (options = {}) => {
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(1)
   const optionsRef = useRef(options)
+  const prevOptionsRef = useRef(null)
 
   const fetchNews = useCallback(async (resetPage = false) => {
     try {
@@ -88,11 +89,28 @@ export const useFetchNews = (options = {}) => {
   }, [fetchNews])
 
   // Refetch when options change (category, mood, sort, etc.)
+  // Compare options by value, not reference, to avoid unnecessary refetches
   useEffect(() => {
+    const optionsString = JSON.stringify(options)
+    const prevOptionsString = JSON.stringify(prevOptionsRef.current)
+    
+    // Only refresh if actual option values changed
+    if (prevOptionsRef.current !== null && optionsString !== prevOptionsString) {
+      console.log('🔄 Options changed, refreshing feed:', options)
+      setPage(1)
+      setArticles([])
+    }
+    
     optionsRef.current = options
-    console.log('🔄 Options changed, refreshing feed:', options)
-    refresh()
-  }, [options, refresh])
+    prevOptionsRef.current = options
+  }, [options])
+
+  // Trigger fetch when page or articles are reset by options change
+  useEffect(() => {
+    if (articles.length === 0 && page === 1) {
+      fetchNews(true)
+    }
+  }, [page, articles.length, fetchNews])
 
   return {
     articles,
