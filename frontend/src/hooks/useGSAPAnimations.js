@@ -48,23 +48,34 @@ export const useScrollReveal = (triggerElement) => {
   useEffect(() => {
     if (!triggerElement?.current) return
 
-    gsap.registerPlugin(ScrollTrigger)
+    // Set safe default - element visible if animation fails to load
+    gsap.set(triggerElement.current, { opacity: 1 })
 
-    gsap.from(triggerElement.current, {
-      scrollTrigger: {
-        trigger: triggerElement.current,
-        start: 'top center+=100',
-        end: 'center center',
-        toggleActions: 'play none none reverse'
-      },
-      opacity: 0,
-      y: 50,
-      duration: 0.8,
-      ease: 'power3.out'
-    })
+    // Use gsap.context() to properly scope and manage this specific animation
+    const ctx = gsap.context(() => {
+      gsap.from(triggerElement.current, {
+        scrollTrigger: {
+          trigger: triggerElement.current,
+          start: 'top center+=100',
+          end: 'center center',
+          toggleActions: 'play none none reverse',
+          markers: false // Disable debug markers in production
+        },
+        opacity: 0,
+        y: 50,
+        duration: 0.8,
+        ease: 'power3.out'
+      })
+    }, triggerElement.current) // Scope to the element ref
+
+    // Refresh ScrollTrigger after delay to account for images loading and DOM changes
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh()
+    }, 300)
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+      clearTimeout(refreshTimer)
+      ctx.revert() // Properly clean up only this animation and its ScrollTrigger
     }
   }, [triggerElement])
 }

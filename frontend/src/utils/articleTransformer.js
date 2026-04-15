@@ -4,9 +4,6 @@
  * Includes sentiment analysis when available
  */
 
-// Global counter for unique ID generation
-let articleIdCounter = 0
-
 export const transformArticle = (apiArticle, index = 0) => {
   // Extract source name if source is an object
   const sourceName = typeof apiArticle.source === 'object' 
@@ -17,11 +14,9 @@ export const transformArticle = (apiArticle, index = 0) => {
   const sentimentLabel = apiArticle.sentimentLabel || 'neutral'
   const normalizedSentiment = sentimentLabel.toLowerCase()
 
-  // Generate a unique ID - use url as primary key (most reliable)
-  // Fallback to combination of source + title + timestamp if url missing
-  const id = apiArticle.url 
-    ? btoa(apiArticle.url).substring(0, 16) // Base64 encode URL for unique ID
-    : `${sourceName}-${apiArticle.publishedAt}-${index}-${++articleIdCounter}`
+  // Generate a unique ID
+  // Priority: _id from API > url > random fallback
+  const id = apiArticle._id || apiArticle.url || Math.random().toString(36).substring(2, 9)
 
   // Create reading time estimate (roughly 200 words per minute)
   const contentLength = (apiArticle.content || apiArticle.description || '').length

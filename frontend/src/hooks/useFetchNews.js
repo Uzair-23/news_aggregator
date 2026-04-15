@@ -8,7 +8,7 @@ export const useFetchNews = (options = {}) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [hasMore, setHasMore] = useState(true)
-  const [page, setPage] = useState(1)
+  const pageRef = useRef(1)
   const optionsRef = useRef(options)
   const prevOptionsRef = useRef(null)
 
@@ -17,7 +17,12 @@ export const useFetchNews = (options = {}) => {
       setLoading(true)
       setError(null)
 
-      const currentPage = resetPage ? 1 : page
+      // Reset page ref if requested, otherwise use current value
+      if (resetPage) {
+        pageRef.current = 1
+      }
+
+      const currentPage = pageRef.current
 
       // Try to fetch from API
       try {
@@ -41,7 +46,7 @@ export const useFetchNews = (options = {}) => {
         }
 
         setHasMore(response.data.hasMore !== false)
-        setPage(currentPage + 1)
+        pageRef.current += 1
       } catch (apiError) {
         console.error('❌ API Error Details:', {
           status: apiError.response?.status,
@@ -69,7 +74,7 @@ export const useFetchNews = (options = {}) => {
     } finally {
       setLoading(false)
     }
-  }, [page])
+  }, [])
 
   const loadMore = useCallback(() => {
     if (!loading && hasMore) {
@@ -78,7 +83,7 @@ export const useFetchNews = (options = {}) => {
   }, [loading, hasMore, fetchNews])
 
   const refresh = useCallback(() => {
-    setPage(1)
+    pageRef.current = 1
     setArticles([])
     fetchNews(true)
   }, [fetchNews])
@@ -97,7 +102,7 @@ export const useFetchNews = (options = {}) => {
     // Only refresh if actual option values changed
     if (prevOptionsRef.current !== null && optionsString !== prevOptionsString) {
       console.log('🔄 Options changed, refreshing feed:', options)
-      setPage(1)
+      pageRef.current = 1
       setArticles([])
     }
     
@@ -105,12 +110,12 @@ export const useFetchNews = (options = {}) => {
     prevOptionsRef.current = options
   }, [options])
 
-  // Trigger fetch when page or articles are reset by options change
+  // Trigger fetch when articles are reset by options change
   useEffect(() => {
-    if (articles.length === 0 && page === 1) {
+    if (articles.length === 0 && pageRef.current === 1) {
       fetchNews(true)
     }
-  }, [page, articles.length, fetchNews])
+  }, [articles.length, fetchNews])
 
   return {
     articles,
