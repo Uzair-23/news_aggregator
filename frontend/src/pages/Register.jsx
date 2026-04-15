@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { validateEmail } from '../utils/helpers'
+import { authAPI } from '../services/api'
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -53,19 +54,14 @@ const Register = () => {
     setLoading(true)
 
     try {
-      // Mock register - replace with API call
-      const mockUser = {
-        id: 1,
-        name,
-        email,
-        role: 'user'
-      }
-
-      register(mockUser, 'mock-token-' + Date.now())
+      const response = await authAPI.register(name, email, password)
+      const { user, token } = response.data
+      
+      register(user, token)
       toast.success('Account created successfully!')
       navigate('/feed')
     } catch (err) {
-      toast.error(err.message || 'Registration failed')
+      toast.error(err.response?.data?.message || err.message || 'Registration failed')
     } finally {
       setLoading(false)
     }

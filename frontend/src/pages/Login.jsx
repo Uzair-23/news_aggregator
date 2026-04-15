@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { validateEmail } from '../utils/helpers'
+import { authAPI } from '../services/api'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -29,19 +30,14 @@ const Login = () => {
     setLoading(true)
 
     try {
-      // Mock login - replace with API call
-      const mockUser = {
-        id: 1,
-        name: email.split('@')[0],
-        email,
-        role: 'user'
-      }
-
-      login(mockUser, 'mock-token-' + Date.now())
+      const response = await authAPI.login(email, password)
+      const { user, token } = response.data
+      
+      login(user, token)
       toast.success('Login successful!')
       navigate('/feed')
     } catch (err) {
-      toast.error(err.message || 'Login failed')
+      toast.error(err.response?.data?.message || err.message || 'Login failed')
     } finally {
       setLoading(false)
     }
