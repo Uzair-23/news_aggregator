@@ -18,7 +18,7 @@ export const useDashboardData = () => {
 
         console.log('📊 Fetching bookmarks for dashboard...')
         const response = await bookmarkAPI.getAll()
-        const bookmarks = response.data || []
+        const bookmarks = response.data?.bookmarks || response.data || []
 
         console.log('✅ Bookmarks received:', bookmarks.length)
 
@@ -76,13 +76,12 @@ function processBookmarkData(bookmarks) {
   const categoryCounts = {}
 
   bookmarks.forEach(bookmark => {
-    // Count sentiments
-    const sentiment = (bookmark.sentiment || 'neutral').toLowerCase()
+    const rawSentiment = (bookmark.sentimentLabel || bookmark.sentiment || 'Neutral').toString()
+    const sentiment = rawSentiment.toLowerCase()
     if (sentiment in sentimentCounts) {
       sentimentCounts[sentiment]++
     }
 
-    // Count categories
     const category = bookmark.category || 'General'
     categoryCounts[category] = (categoryCounts[category] || 0) + 1
   })
@@ -92,18 +91,9 @@ function processBookmarkData(bookmarks) {
 
   // Format sentiment data for pie chart
   const sentimentData = [
-    {
-      name: 'Positive',
-      value: Math.round((sentimentCounts.positive / totalArticles) * 100)
-    },
-    {
-      name: 'Neutral',
-      value: Math.round((sentimentCounts.neutral / totalArticles) * 100)
-    },
-    {
-      name: 'Negative',
-      value: Math.round((sentimentCounts.negative / totalArticles) * 100)
-    }
+    { name: 'Positive', value: sentimentCounts.positive },
+    { name: 'Neutral', value: sentimentCounts.neutral },
+    { name: 'Negative', value: sentimentCounts.negative }
   ]
 
   // Format category data for bar chart (top 5)

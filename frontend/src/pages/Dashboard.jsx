@@ -98,7 +98,7 @@ const Dashboard = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <StatsCard
               icon={BookOpen}
               label="Articles Read"
@@ -130,8 +130,8 @@ const Dashboard = () => {
             {/* Weekly Reading */}
             <div className="card-base p-6">
               <h3 className="text-lg font-bold mb-6">Weekly Reading</h3>
-              <div className="min-h-[300px] w-full">
-                <ResponsiveContainer width="100%" height={300}>
+              <div className="w-full min-h-[300px] h-80">
+                <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={weeklyReading}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
                     <XAxis stroke="#a1a1aa" />
@@ -154,8 +154,8 @@ const Dashboard = () => {
             {/* Sentiment Distribution */}
             <div className="card-base p-6">
               <h3 className="text-lg font-bold mb-6">Sentiment Distribution</h3>
-              <div className="min-h-[300px] w-full flex items-center justify-center">
-                <ResponsiveContainer width="100%" height={300}>
+              <div className="w-full min-h-[300px] h-80 flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={sentimentData}
@@ -180,8 +180,8 @@ const Dashboard = () => {
             {/* Category Reading */}
             <div className="card-base p-6 lg:col-span-2">
               <h3 className="text-lg font-bold mb-6">Top Categories</h3>
-              <div className="min-h-[300px] w-full">
-                <ResponsiveContainer width="100%" height={300}>
+              <div className="w-full min-h-[300px] h-80">
+                <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={categoryData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
                   <XAxis stroke="#a1a1aa" />
