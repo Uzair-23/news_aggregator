@@ -23,15 +23,36 @@ export const useFetchNews = (options = {}) => {
       }
 
       const currentPage = pageRef.current
+      const currentOptions = optionsRef.current || {}
 
       // Try to fetch from API
       try {
-        console.log('📰 Fetching news with options:', optionsRef.current)
-        const response = await newsAPI.getLatest({
-          page: currentPage,
-          limit: optionsRef.current.limit || 12,
-          ...optionsRef.current
-        })
+        console.log('📰 Fetching news with options:', currentOptions)
+        let response
+
+        if (currentOptions.query && currentOptions.query.trim()) {
+          response = await newsAPI.search(currentOptions.query.trim(), {
+            page: currentPage,
+            limit: 12,
+            sortBy: currentOptions.sort
+          })
+        } else if (currentOptions.mood && currentOptions.mood !== 'everything') {
+          response = await newsAPI.search(currentOptions.mood, {
+            page: currentPage,
+            limit: 12,
+            sortBy: currentOptions.sort
+          })
+        } else if (currentOptions.category && currentOptions.category !== 'General') {
+          response = await newsAPI.getByCategory(currentOptions.category.toLowerCase(), {
+            page: currentPage,
+            limit: 12
+          })
+        } else {
+          response = await newsAPI.getLatest({
+            page: currentPage,
+            limit: 12
+          })
+        }
 
         console.log('✅ API Response received:', response.data)
         
@@ -82,10 +103,10 @@ export const useFetchNews = (options = {}) => {
     }
   }, [loading, hasMore, fetchNews])
 
-  const refresh = useCallback(() => {
+  const refresh = useCallback(async () => {
     pageRef.current = 1
     setArticles([])
-    fetchNews(true)
+    await fetchNews(true)
   }, [fetchNews])
 
   // Initial fetch on component mount
@@ -94,20 +115,24 @@ export const useFetchNews = (options = {}) => {
   }, [fetchNews])
 
   // Refetch when options change (category, mood, sort, etc.)
-  // Compare options by value, not reference, to avoid unnecessary refetches
   useEffect(() => {
-    const optionsString = JSON.stringify(options)
-    const prevOptionsString = JSON.stringify(prevOptionsRef.current)
-    
-    // Only refresh if actual option values changed
-    if (prevOptionsRef.current !== null && optionsString !== prevOptionsString) {
-      console.log('🔄 Options changed, refreshing feed:', options)
+    const prev = prevOptionsRef.current
+    const next = options || {}
+
+    const hasChanged = !prev ||
+      prev.category !== next.category ||
+      prev.mood !== next.mood ||
+      prev.sort !== next.sort ||
+      prev.query !== next.query
+
+    optionsRef.current = next
+    prevOptionsRef.current = next
+
+    if (hasChanged) {
+      console.log('🔄 Options changed, refreshing feed:', next)
       pageRef.current = 1
       setArticles([])
     }
-    
-    optionsRef.current = options
-    prevOptionsRef.current = options
   }, [options])
 
   // Trigger fetch when articles are reset by options change

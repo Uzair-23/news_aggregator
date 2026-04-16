@@ -11,9 +11,11 @@ import { ChevronDown } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const Feed = () => {
-  const [selectedCategories, setSelectedCategories] = useState(['Technology'])
+  const [selectedCategory, setSelectedCategory] = useState('General')
   const [selectedMood, setSelectedMood] = useState('everything')
   const [sortBy, setSortBy] = useState('latest')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchKey, setSearchKey] = useState(0)
 
   // Real Bookmark State connected to Backend
   const [bookmarks, setBookmarks] = useState(new Set()) // Stores URLs for fast frontend UI toggle
@@ -21,10 +23,11 @@ const Feed = () => {
 
   // Memoize fetch options to prevent infinite loop
   const fetchOptions = useMemo(() => ({
-    categories: selectedCategories,
+    category: selectedCategory,
     mood: selectedMood,
-    sort: sortBy
-  }), [selectedCategories, selectedMood, sortBy])
+    sort: sortBy,
+    query: searchQuery
+  }), [selectedCategory, selectedMood, sortBy, searchQuery])
 
   const { articles, loading, hasMore, loadMore } = useFetchNews(fetchOptions)
   const feedRef = useRef(null)
@@ -108,13 +111,12 @@ const Feed = () => {
     }
   }
 
-  const toggleCategory = (category) => {
-    setSelectedCategories(prev => {
-      if (prev.includes(category)) {
-        return prev.filter(c => c !== category)
-      }
-      return [...prev, category]
-    })
+  const handleResetFilters = () => {
+    setSelectedCategory('General')
+    setSelectedMood('everything')
+    setSortBy('latest')
+    setSearchQuery('')
+    setSearchKey(prev => prev + 1)
   }
 
   return (
@@ -132,29 +134,41 @@ const Feed = () => {
 
           {/* Filters */}
           <div className="glass-card p-4 space-y-4">
-            <SearchBar placeholder="Search articles..." />
+            <div className="flex flex-col md:flex-row md:items-center gap-3">
+              <div className="flex-1">
+                <SearchBar
+                  key={searchKey}
+                  placeholder="Search articles..."
+                  onSearch={setSearchQuery}
+                  onClear={() => setSearchQuery('')}
+                />
+              </div>
+              <button
+                onClick={handleResetFilters}
+                className="px-4 py-2 rounded-lg text-sm bg-[#111111] text-zinc-300 hover:bg-[#1f1f1f] transition-colors"
+              >
+                Reset Filters
+              </button>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Categories */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-zinc-300">Category</label>
-                <div className="flex flex-wrap gap-2">
-                  {CATEGORIES.slice(0, 4).map(cat => (
-                    <button
-                      key={cat}
-                      onClick={() => toggleCategory(cat)}
-                      className={`badge text-xs transition-all ${
-                        selectedCategories.includes(cat)
-                          ? 'bg-blue-500/30 text-blue-500'
-                          : 'bg-[#111111] text-zinc-400 hover:bg-[#1f1f1f]'
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  ))}
+                <div className="relative">
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="input-base appearance-none pr-10"
+                  >
+                    {CATEGORIES.map(cat => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 pointer-events-none" />
                 </div>
               </div>
 
-              {/* Mood */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-zinc-300">Mood</label>
                 <div className="relative">
@@ -173,7 +187,6 @@ const Feed = () => {
                 </div>
               </div>
 
-              {/* Sort */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-zinc-300">Sort By</label>
                 <div className="relative">
